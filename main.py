@@ -1,10 +1,11 @@
+import sys
 import pygame
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from circleshape import CircleShape
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from logger import log_state
+from logger import log_state, log_event
 
 def main():
     pygame.init()
@@ -17,6 +18,7 @@ def main():
     asteroids = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable) # must be done before any Player objects are created. This line puts all future Player objects in these two groups.
+    
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
 
@@ -34,6 +36,13 @@ def main():
         dt = (clock.tick(60)) / 1000  # limits framerate to 60FPS 
 
         updatable.update(dt)          # updates objects in classes in updatable Group. Currenly only player, will need to refactor when asteroids are added.
+        
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
+
         screen.fill(color=(0, 0, 0))  # sets screen fill to black
         for entity in drawable:       # draws all objects from the classes in drawable Group
             entity.draw(screen)
