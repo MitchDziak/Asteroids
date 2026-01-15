@@ -1,5 +1,7 @@
 import pygame
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 from circleshape import CircleShape
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from logger import log_state
@@ -12,10 +14,15 @@ def main():
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable) # must be done before any Player objects are created. This line puts all future Player objects in these two groups.
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable)
+
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroid_field = AsteroidField()
 
     while True:
         log_state()
