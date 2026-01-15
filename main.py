@@ -44,6 +44,14 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+                
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    log_event("asteroid_shot")
+                    shot.kill()
+                    asteroid.kill()
+                
+
 
         screen.fill(color=(0, 0, 0))  # sets screen fill to black
         for entity in drawable:       # draws all objects from the classes in drawable Group
