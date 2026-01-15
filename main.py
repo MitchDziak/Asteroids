@@ -9,6 +9,12 @@ def main():
     screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable) # must be done before any Player objects are created. This line puts all future Player objects in these two groups.
+
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while True:
@@ -20,9 +26,10 @@ def main():
             
         dt = (clock.tick(60)) / 1000  # limits framerate to 60FPS 
 
-        player.update(dt)
+        updatable.update(dt)          # updates objects in classes in updatable Group. Currenly only player, will need to refactor when asteroids are added.
         screen.fill(color=(0, 0, 0))  # sets screen fill to black
-        player.draw(screen)
+        for entity in drawable:       # draws all objects from the classes in drawable Group
+            entity.draw(screen)
 
         pygame.display.flip()
 
